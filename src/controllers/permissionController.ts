@@ -20,3 +20,20 @@ export const getPermissions = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error fetching permissions' });
   }
 };
+
+export const updatePermission = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, description } = req.body;
+
+  try {
+    const updatedPermission = await Permission.findByIdAndUpdate(
+      id,
+      { name, description },
+      { new: true }
+    );
+    if (!updatedPermission) return res.status(404).json({ error: 'Permission not found' });
+    res.status(200).json(updatedPermission);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating permission' });
+  }
+};
